@@ -49,6 +49,7 @@ public class AppsActivity extends AppCompatActivity {
     }
 
     private void getPermission() {
+
         int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1;
         AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
