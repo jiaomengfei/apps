@@ -130,41 +130,59 @@ public class AppsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            String permissionWithVal = "";
+            if (pi.requestedPermissions != null) {
+                for (int i = 0; i < pi.requestedPermissions.length; i++) {
+                    Log.d("granted2", "onCreate: " + pi.requestedPermissions[i].toString());
+                    String permissionName = removePackegeFromPermissionName(pi.requestedPermissions[i]);
+                    granted.add(pi.requestedPermissions[i]);
+                    permissionWithVal += permissionName ;
+                }
 
-            JSONObject jo = new JSONObject();
-            JSONArray jsArray = new JSONArray(granted);
-            try {
-                jo.put("user_permissions", jsArray);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                if (!permissionWithVal.equals("")) {
+                    permissionWithVal = permissionWithVal.substring(0, permissionWithVal.length() - 1);
+                }
             }
+                JSONObject jo = new JSONObject();
+                JSONArray jsArray = new JSONArray(granted);
+                try {
+                    jo.put("user_permissions", jsArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            UsageStats existingStats =
-                    lUsageStatsMap.get(packageName);
-            String appSpendTime = "-";
-            if (existingStats != null) {
-                long totalTimeUsageInMillis = lUsageStatsMap.get(packageName).
-                        getTotalTimeInForeground();
-                appSpendTime = String.valueOf(DateUtils.formatElapsedTime(totalTimeUsageInMillis / 1000));
+                UsageStats existingStats =
+                        lUsageStatsMap.get(packageName);
+                String appSpendTime = "-";
+                if (existingStats != null) {
+                    long totalTimeUsageInMillis = lUsageStatsMap.get(packageName).
+                            getTotalTimeInForeground();
+                    appSpendTime = String.valueOf(DateUtils.formatElapsedTime(totalTimeUsageInMillis / 1000));
+                }
+                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes, appSpendTime));
+
             }
-            appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes, appSpendTime));
-
+            mAdapter.notifyDataSetChanged();
         }
-        mAdapter.notifyDataSetChanged();
-    }
 
-    private void initView() {
-        RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecycleView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecycleView.setLayoutManager(linearLayoutManager);
-        mAdapter = new AppsListAdapter(this, appList);
-        mRecycleView.setAdapter(mAdapter);
-    }
+        private void initView () {
+            RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.recyclerView);
+            mRecycleView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecycleView.setLayoutManager(linearLayoutManager);
+            mAdapter = new AppsListAdapter(this, appList);
+            mRecycleView.setAdapter(mAdapter);
+        }
 
-    private boolean isSystemPackage(PackageInfo pkgInfo) {
-        return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
-                : false;
+        private boolean isSystemPackage (PackageInfo pkgInfo){
+            return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
+                    : false;
+        }
+
+        public String removePackegeFromPermissionName (String permission_text){
+            String[] splited = permission_text.split("\\.");
+            String permissionName = splited[splited.length - 1];
+            return permissionName;
+        }
     }
-}

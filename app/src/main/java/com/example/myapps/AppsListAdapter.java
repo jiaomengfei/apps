@@ -3,16 +3,21 @@ package com.example.myapps;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -56,38 +61,38 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppsListAdapter.ViewHo
         }
 
         holder.appSizeTxt.setText(totalSize);
-//        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context, AppDetailActivity.class);
-//                Log.d("imag", "onClick: " + listdata.get(position).getAppIcon());
-//                Bitmap bitmap = getBitmapFromDrawable(listdata.get(position).getAppIcon());
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//                byte[] appIcon = baos.toByteArray();
-//
-//                Log.d("AppListBean1", "onCreate: " + listdata.get(position).getAppName()
-//                        + "==" + "--" + listdata.get(position).getMinSdkVersion()
-//                        + "**" + listdata.get(position).getTargetSdkVersion());
-//
-//                intent.putExtra("ver_name", listdata.get(position).getVerName());
-//                intent.putExtra("min_sdk_ver", Integer.toString(listdata.get(position).getMinSdkVersion()));
-//                intent.putExtra("target_sdk_ver", Integer.toString(listdata.get(position).getTargetSdkVersion()));
-//                intent.putExtra("app_name", listdata.get(position).getAppName());
-//                intent.putExtra("app_icon", appIcon);
-//                intent.putExtra("app_info", listdata.get(position).getPermissionList());
-//                intent.putExtra("app_size", listdata.get(position).getAppSize() == "" ? "0.0" : listdata.get(position).getAppSize());
-//                intent.putExtra("data_size", listdata.get(position).getUserDataSize() == "" ? "0.0" : listdata.get(position).getUserDataSize());
-//                intent.putExtra("total_size_bytes", listdata.get(position).getTotalSize() == 0 ? "0" : String.valueOf(listdata.get(position).getTotalSize()));
-//                intent.putExtra("user_data_size_bytes", listdata.get(position).getUserDataSizeBytes() == 0 ? "0" : String.valueOf(listdata.get(position).getUserDataSizeBytes()));
-//                intent.putExtra("app_spend_time", listdata.get(position).getAppSpendTime());
-//                Log.d("app_icon", "onClick: " + listdata.get(position).getAppIcon().toString());
-//
-//
-//                context.startActivity(intent);
-//                Toast.makeText(view.getContext(), "click on item: " + myListData.getAppName(), Toast.LENGTH_LONG).show();
-//            }
-//        });
+        holder.appItemRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AppDetailActivity.class);
+                Log.d("imag", "onClick: " + listdata.get(position).getAppIcon());
+                Bitmap bitmap = getBitmapFromDrawable(listdata.get(position).getAppIcon());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] appIcon = baos.toByteArray();
+
+                Log.d("AppListBean1", "onCreate: " + listdata.get(position).getAppName()
+                        + "==" + "--" + listdata.get(position).getMinSdkVersion()
+                        + "**" + listdata.get(position).getTargetSdkVersion());
+
+                intent.putExtra("ver_name", listdata.get(position).getVerName());
+                intent.putExtra("min_sdk_ver", Integer.toString(listdata.get(position).getMinSdkVersion()));
+                intent.putExtra("target_sdk_ver", Integer.toString(listdata.get(position).getTargetSdkVersion()));
+                intent.putExtra("app_name", listdata.get(position).getAppName());
+                intent.putExtra("app_icon", appIcon);
+                intent.putExtra("app_info", listdata.get(position).getPermissionList());
+                intent.putExtra("app_size", listdata.get(position).getAppSize() == "" ? "0.0" : listdata.get(position).getAppSize());
+                intent.putExtra("data_size", listdata.get(position).getUserDataSize() == "" ? "0.0" : listdata.get(position).getUserDataSize());
+                intent.putExtra("total_size_bytes", listdata.get(position).getTotalSize() == 0 ? "0" : String.valueOf(listdata.get(position).getTotalSize()));
+                intent.putExtra("user_data_size_bytes", listdata.get(position).getUserDataSizeBytes() == 0 ? "0" : String.valueOf(listdata.get(position).getUserDataSizeBytes()));
+                intent.putExtra("app_spend_time", listdata.get(position).getAppSpendTime());
+                Log.d("app_icon", "onClick: " + listdata.get(position).getAppIcon().toString());
+
+
+                context.startActivity(intent);
+                Toast.makeText(view.getContext(), "click on item: " + myListData.getAppName(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -101,7 +106,7 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppsListAdapter.ViewHo
         public ImageView appIconImageView;
         public TextView appNameTxt;
         public TextView appSizeTxt;
-        public LinearLayout linearLayout;
+        public RelativeLayout appItemRoot;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +114,7 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppsListAdapter.ViewHo
             this.appNameTxt = (TextView) itemView.findViewById(R.id.appNameTxt);
             this.appSizeTxt = (TextView) itemView.findViewById(R.id.appSizeTxt);
             this.appIndexTxt = (TextView) itemView.findViewById(R.id.appIndexTxt);
+            this.appItemRoot = (RelativeLayout) itemView.findViewById(R.id.app_item_root);
         }
     }
 
