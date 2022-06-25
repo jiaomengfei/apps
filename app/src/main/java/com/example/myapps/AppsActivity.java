@@ -18,9 +18,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -79,6 +82,7 @@ public class AppsActivity extends AppCompatActivity {
                 queryAndAggregateUsageStats(cal.getTimeInMillis(), System.currentTimeMillis());
         int api_level = Build.VERSION.SDK_INT;
         String maxCupFred = getMaxCpuFreq();
+        String networkType = getNetworkState(this);
         for (PackageInfo pi : packageList) {
             boolean b = isSystemPackage(pi);
 
@@ -167,7 +171,7 @@ public class AppsActivity extends AppCompatActivity {
                             getTotalTimeInForeground();
                     appSpendTime = String.valueOf(DateUtils.formatElapsedTime(totalTimeUsageInMillis / 1000));
                 }
-                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes,mBatteryLevel,maxCupFred));
+                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes,mBatteryLevel,maxCupFred,networkType));
 
             }
             mAdapter.notifyDataSetChanged();
@@ -224,4 +228,56 @@ public class AppsActivity extends AppCompatActivity {
         }
         return result.trim();
     }
+
+    public static String getNetworkState(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); // 获取网络服务
+        if (null == connManager) {
+            return "OTHER";
+        }
+        NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
+        if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
+            return "OTHER";
+        }
+        NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (null != wifiInfo) {
+            NetworkInfo.State state = wifiInfo.getState();
+            if (null != state) {
+                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+                    return "WIFI";
+                }
+            }
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) return "OTHER";
+        @SuppressLint("MissingPermission") int networkType = telephonyManager.getNetworkType();
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "2G";
+            // 3G
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "3G";
+            case TelephonyManager.NETWORK_TYPE_LTE:
+            case 19:
+                return "4G";
+            // 5G
+//            case TelephonyManager.NETWORK_TYPE_NR:// need SdkVersion>=29
+            case 20:// 当 SdkVersion<=28
+                return "5G";
+            default:
+                return "OTHER";
+        }
+    }
+
     }

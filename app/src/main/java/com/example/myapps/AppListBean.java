@@ -20,10 +20,11 @@ public class AppListBean {
     private long userDataSizeBytes;
     private int batteryLevel;
     private String maxCpuFreq;
+    private String networkType;
 
 
 
-    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,int batteryLevel,String maxCpuFreq) {
+    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,int batteryLevel,String maxCpuFreq,String networkType) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.permissionList = permissionList;
@@ -37,6 +38,7 @@ public class AppListBean {
         this.userDataSizeBytes = userDataSizeBytes;
         this.batteryLevel = batteryLevel;
         this.maxCpuFreq = maxCpuFreq;
+        this.networkType = networkType;
     }
     public String getPermissionList() {
         return permissionList;
@@ -122,4 +124,11 @@ public class AppListBean {
         return userDataSizeBytes;
     }
 
+    public String getNetworkType() {
+        return networkType;
+    }
+
+    public void setNetworkType(String networkType) {
+        this.networkType = networkType;
+    }
 }

@@ -43,6 +43,7 @@ public class AppDetailActivity extends AppCompatActivity {
         TextView dataSizeDetailTxt = (TextView) findViewById(R.id.dataSizeDetailTxt);
         TextView batteryLevelTxt = (TextView) findViewById(R.id.battery_level);
         TextView maxCpuFred = (TextView) findViewById(R.id.max_cpu_fred);
+        TextView netWorkType = findViewById(R.id.network_type);
         Intent intent = getIntent();
         String app_info = intent.getStringExtra("app_info");
         String ver_name = intent.getStringExtra("ver_name");
@@ -52,6 +53,7 @@ public class AppDetailActivity extends AppCompatActivity {
         String app_size = intent.getStringExtra("app_size");
         String data_size = intent.getStringExtra("data_size");
         String max_cup_fred = intent.getStringExtra("max_cpu_fred");
+        String network_type = intent.getStringExtra("network_type");
 
         double totalSizeBytes = Double.parseDouble(intent.getStringExtra("total_size_bytes"));
         double userDataSizeBytes = Double.parseDouble(intent.getStringExtra("user_data_size_bytes"));
@@ -75,6 +77,7 @@ public class AppDetailActivity extends AppCompatActivity {
         dataSizeDetailTxt.setText(data_size);
         batteryLevelTxt.setText(AppsActivity.mBatteryLevel+"%");
         maxCpuFred.setText(max_cup_fred+" KHZ");
+        netWorkType.setText(network_type);
         ConstantsConfig constantsConfig = new ConstantsConfig();
         List<PermissionListBean> permissionsData = constantsConfig.permissionsData();//permissionsData();
         List<PermissionListBean> appPermissionList = new ArrayList<PermissionListBean>();
