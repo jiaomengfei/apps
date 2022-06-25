@@ -18,11 +18,12 @@ public class AppListBean {
     private int targetSdkVersion;
     private long totalSize;
     private long userDataSizeBytes;
-    private String appSpendTime;
+    private int batteryLevel;
+    private String maxCpuFreq;
 
 
 
-    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,String appSpendTime) {
+    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,int batteryLevel,String maxCpuFreq) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.permissionList = permissionList;
@@ -34,8 +35,8 @@ public class AppListBean {
         this.cacheSize = cacheSize;
         this.totalSize = totalSize;
         this.userDataSizeBytes = userDataSizeBytes;
-        this.appSpendTime = appSpendTime;
-        Log.d("AppListBean", "onCreate: " + appName+"=="+"--"+minSdkVersion+"**"+targetSdkVersion);
+        this.batteryLevel = batteryLevel;
+        this.maxCpuFreq = maxCpuFreq;
     }
     public String getPermissionList() {
         return permissionList;
@@ -67,6 +68,22 @@ public class AppListBean {
 
     public void setVerName(String verName) {
         this.verName = verName;
+    }
+
+    public int getBatteryLevel() {
+        return batteryLevel;
+    }
+
+    public void setBatteryLevel(int batteryLevel) {
+        this.batteryLevel = batteryLevel;
+    }
+
+    public String getMaxCpuFreq() {
+        return maxCpuFreq;
+    }
+
+    public void setMaxCpuFreq(String maxCpuFreq) {
+        this.maxCpuFreq = maxCpuFreq;
     }
 
     public int getMinSdkVersion() {
@@ -103,11 +120,6 @@ public class AppListBean {
 
     public long getUserDataSizeBytes() {
         return userDataSizeBytes;
-    }
-
-
-    public String getAppSpendTime() {
-        return appSpendTime;
     }
 
 }

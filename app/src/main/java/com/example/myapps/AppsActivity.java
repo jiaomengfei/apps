@@ -10,8 +10,10 @@ import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +41,8 @@ public class AppsActivity extends AppCompatActivity {
     private List<AppListBean> appList = new ArrayList<AppListBean>();
     private static DecimalFormat df = new DecimalFormat("0.00");
     private AppsListAdapter mAdapter;
+    public static int mBatteryLevel = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,7 @@ public class AppsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         getPermission();
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         initData();
     }
 
@@ -72,6 +78,7 @@ public class AppsActivity extends AppCompatActivity {
         Map<String, UsageStats> lUsageStatsMap = mUsageStatsManager.
                 queryAndAggregateUsageStats(cal.getTimeInMillis(), System.currentTimeMillis());
         int api_level = Build.VERSION.SDK_INT;
+        String maxCupFred = getMaxCpuFreq();
         for (PackageInfo pi : packageList) {
             boolean b = isSystemPackage(pi);
 
@@ -130,6 +137,7 @@ public class AppsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             String permissionWithVal = "";
             if (pi.requestedPermissions != null) {
                 for (int i = 0; i < pi.requestedPermissions.length; i++) {
@@ -159,7 +167,7 @@ public class AppsActivity extends AppCompatActivity {
                             getTotalTimeInForeground();
                     appSpendTime = String.valueOf(DateUtils.formatElapsedTime(totalTimeUsageInMillis / 1000));
                 }
-                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes, appSpendTime));
+                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes,mBatteryLevel,maxCupFred));
 
             }
             mAdapter.notifyDataSetChanged();
@@ -175,6 +183,16 @@ public class AppsActivity extends AppCompatActivity {
             mRecycleView.setAdapter(mAdapter);
         }
 
+    private BroadcastReceiver batteryReceiver=new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra("level", 0);
+            mBatteryLevel = level;
+        }
+    };
+
+
         private boolean isSystemPackage (PackageInfo pkgInfo){
             return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
                     : false;
@@ -185,4 +203,25 @@ public class AppsActivity extends AppCompatActivity {
             String permissionName = splited[splited.length - 1];
             return permissionName;
         }
+
+    public static String getMaxCpuFreq() {
+        String result = "";
+        ProcessBuilder cmd;
+        try {
+            String[] args = { "/system/bin/cat",
+                    "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq" };
+            cmd = new ProcessBuilder(args);
+            Process process = cmd.start();
+            InputStream in = process.getInputStream();
+            byte[] re = new byte[24];
+            while (in.read(re) != -1) {
+                result = result + new String(re);
+            }
+            in.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            result = "N/A";
+        }
+        return result.trim();
+    }
     }

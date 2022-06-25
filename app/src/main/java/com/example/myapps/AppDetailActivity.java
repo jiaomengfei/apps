@@ -41,8 +41,8 @@ public class AppDetailActivity extends AppCompatActivity {
         TextView targetSdkDetailTxt = (TextView) findViewById(R.id.targetSdkDetailTxt);
         TextView appSizeDetailTxt = (TextView) findViewById(R.id.appSizeDetailTxt);
         TextView dataSizeDetailTxt = (TextView) findViewById(R.id.dataSizeDetailTxt);
-        TextView appSpendTimeDetailTxt = (TextView) findViewById(R.id.appSpendTimeDetailTxt);
-        TextView riskMsgTxt = (TextView) findViewById(R.id.riskMsgTxt);
+        TextView batteryLevelTxt = (TextView) findViewById(R.id.battery_level);
+        TextView maxCpuFred = (TextView) findViewById(R.id.max_cpu_fred);
         Intent intent = getIntent();
         String app_info = intent.getStringExtra("app_info");
         String ver_name = intent.getStringExtra("ver_name");
@@ -51,7 +51,7 @@ public class AppDetailActivity extends AppCompatActivity {
         String app_name = intent.getStringExtra("app_name");
         String app_size = intent.getStringExtra("app_size");
         String data_size = intent.getStringExtra("data_size");
-        String app_spend_time = intent.getStringExtra("app_spend_time");
+        String max_cup_fred = intent.getStringExtra("max_cpu_fred");
 
         double totalSizeBytes = Double.parseDouble(intent.getStringExtra("total_size_bytes"));
         double userDataSizeBytes = Double.parseDouble(intent.getStringExtra("user_data_size_bytes"));
@@ -73,7 +73,8 @@ public class AppDetailActivity extends AppCompatActivity {
         targetSdkDetailTxt.setText(target_sdk_ver);
         appSizeDetailTxt.setText(app_size);
         dataSizeDetailTxt.setText(data_size);
-        appSpendTimeDetailTxt.setText(app_spend_time);
+        batteryLevelTxt.setText(AppsActivity.mBatteryLevel+"%");
+        maxCpuFred.setText(max_cup_fred+" KHZ");
         ConstantsConfig constantsConfig = new ConstantsConfig();
         List<PermissionListBean> permissionsData = constantsConfig.permissionsData();//permissionsData();
         List<PermissionListBean> appPermissionList = new ArrayList<PermissionListBean>();
@@ -88,7 +89,6 @@ public class AppDetailActivity extends AppCompatActivity {
                 String[] splited = tmpPer.replace("_", " ").split("\\.");
                 String permissionName = upperCaseFirst(splited[splited.length - 1].toLowerCase());
                 Double permissionVal = 0.0;
-//                Log.d("testo12", "onCreate: "+ "="+ tmpPer+"=="+upperCaseFirst(permissionName));
                 if (data_size != "") {
                     for (int j = 0; j < permissionsData.size(); j++) {
                         Log.d("Permission1", "onCreate: ##" + splited[splited.length - 1].replace(" ", "_") + "##" + permissionsData.get(j).getPermissionName() + "**");

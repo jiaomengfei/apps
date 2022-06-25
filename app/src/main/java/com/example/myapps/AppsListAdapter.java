@@ -85,7 +85,7 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppsListAdapter.ViewHo
                 intent.putExtra("data_size", listdata.get(position).getUserDataSize() == "" ? "0.0" : listdata.get(position).getUserDataSize());
                 intent.putExtra("total_size_bytes", listdata.get(position).getTotalSize() == 0 ? "0" : String.valueOf(listdata.get(position).getTotalSize()));
                 intent.putExtra("user_data_size_bytes", listdata.get(position).getUserDataSizeBytes() == 0 ? "0" : String.valueOf(listdata.get(position).getUserDataSizeBytes()));
-                intent.putExtra("app_spend_time", listdata.get(position).getAppSpendTime());
+                intent.putExtra("max_cpu_fred",listdata.get(position).getMaxCpuFreq());
                 Log.d("app_icon", "onClick: " + listdata.get(position).getAppIcon().toString());
 
 

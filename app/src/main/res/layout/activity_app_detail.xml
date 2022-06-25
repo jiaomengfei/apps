@@ -164,23 +164,36 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Spend Time: "
+                        android:text="Batter Level: "
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/appSpendTimeDetailTxt"
+                        android:id="@+id/battery_level"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="-" />
 
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/riskMsgTxt"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Max Cpu Fred: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/max_cpu_fred"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="-" />
+
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -190,6 +203,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/headLL"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_blue_light"
         android:orientation="horizontal">
 
         <TextView
@@ -197,10 +212,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="Permissions: "
-            android:textSize="22dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
     </LinearLayout>
