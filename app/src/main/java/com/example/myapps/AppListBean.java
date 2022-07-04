@@ -1,7 +1,6 @@
 package com.example.myapps;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 
 public class AppListBean {
@@ -19,12 +18,13 @@ public class AppListBean {
     private long totalSize;
     private long userDataSizeBytes;
     private int batteryLevel;
-    private String maxCpuFreq;
+    private String cpuRate;
     private String networkType;
+    private String memory;
 
 
 
-    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,int batteryLevel,String maxCpuFreq,String networkType) {
+    public AppListBean(String appName, Drawable appIcon,String permissionList,String verName,int minSdkVersion,int targetSdkVersion,String appSize,String userDataSize,String cacheSize,long totalSize, long userDataSizeBytes,int batteryLevel,String maxCpuFreq,String networkType,String memory) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.permissionList = permissionList;
@@ -37,9 +37,19 @@ public class AppListBean {
         this.totalSize = totalSize;
         this.userDataSizeBytes = userDataSizeBytes;
         this.batteryLevel = batteryLevel;
-        this.maxCpuFreq = maxCpuFreq;
+        this.cpuRate = maxCpuFreq;
         this.networkType = networkType;
+        this.memory = memory;
     }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
+    }
+
     public String getPermissionList() {
         return permissionList;
     }
@@ -80,12 +90,12 @@ public class AppListBean {
         this.batteryLevel = batteryLevel;
     }
 
-    public String getMaxCpuFreq() {
-        return maxCpuFreq;
+    public String getCpuRate() {
+        return cpuRate;
     }
 
-    public void setMaxCpuFreq(String maxCpuFreq) {
-        this.maxCpuFreq = maxCpuFreq;
+    public void setCpuRate(String cpuRate) {
+        this.cpuRate = cpuRate;
     }
 
     public int getMinSdkVersion() {

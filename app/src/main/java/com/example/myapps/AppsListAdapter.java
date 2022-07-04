@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,7 +84,8 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppsListAdapter.ViewHo
                 intent.putExtra("data_size", listdata.get(position).getUserDataSize() == "" ? "0.0" : listdata.get(position).getUserDataSize());
                 intent.putExtra("total_size_bytes", listdata.get(position).getTotalSize() == 0 ? "0" : String.valueOf(listdata.get(position).getTotalSize()));
                 intent.putExtra("user_data_size_bytes", listdata.get(position).getUserDataSizeBytes() == 0 ? "0" : String.valueOf(listdata.get(position).getUserDataSizeBytes()));
-                intent.putExtra("max_cpu_fred",listdata.get(position).getMaxCpuFreq());
+                intent.putExtra("max_cpu_fred",listdata.get(position).getCpuRate());
+                intent.putExtra("memory",listdata.get(position).getMemory());
                 intent.putExtra("network_type",listdata.get(position).getNetworkType());
                 Log.d("app_icon", "onClick: " + listdata.get(position).getAppIcon().toString());
 

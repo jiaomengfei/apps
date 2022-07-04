@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
@@ -22,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
@@ -31,8 +33,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,8 +85,9 @@ public class AppsActivity extends AppCompatActivity {
         Map<String, UsageStats> lUsageStatsMap = mUsageStatsManager.
                 queryAndAggregateUsageStats(cal.getTimeInMillis(), System.currentTimeMillis());
         int api_level = Build.VERSION.SDK_INT;
-        String maxCupFred = getMaxCpuFreq();
+        String cupRate = getProcessCpuRate();
         String networkType = getNetworkState(this);
+        String memory = String.valueOf(getMemory());
         for (PackageInfo pi : packageList) {
             boolean b = isSystemPackage(pi);
 
@@ -171,7 +176,7 @@ public class AppsActivity extends AppCompatActivity {
                             getTotalTimeInForeground();
                     appSpendTime = String.valueOf(DateUtils.formatElapsedTime(totalTimeUsageInMillis / 1000));
                 }
-                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes,mBatteryLevel,maxCupFred,networkType));
+                appList.add(new AppListBean(appName, appIcon, jo.toString(), verName, minSdkVersion, targetSdkVersion, appSize, userDataSize, cacheSize, totalSize, userDataSizeBytes,mBatteryLevel,cupRate,networkType,memory));
 
             }
             mAdapter.notifyDataSetChanged();
@@ -278,6 +283,81 @@ public class AppsActivity extends AppCompatActivity {
             default:
                 return "OTHER";
         }
+    }
+
+    /** get CPU rate
+     * @return
+     */
+    private String getProcessCpuRate() {
+
+//        StringBuilder tv = new StringBuilder();
+//        int rate = 0;
+//
+//        try {
+//            String Result;
+//            Process p;
+//            p = Runtime.getRuntime().exec("top -n 1");
+//
+//            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//            while ((Result = br.readLine()) != null) {
+//                if (Result.trim().length() < 1) {
+//                    continue;
+//                } else {
+//                    String[] CPUusr = Result.split("%");
+//                    tv.append("USER:" + CPUusr[0] + "\n");
+//                    String[] CPUusage = CPUusr[0].split("User");
+//                    String[] SYSusage = CPUusr[1].split("System");
+//                    tv.append("CPU:" + CPUusage[1].trim() + " length:" + CPUusage[1].trim().length() + "\n");
+//                    tv.append("SYS:" + SYSusage[1].trim() + " length:" + SYSusage[1].trim().length() + "\n");
+//
+//                    rate = Integer.parseInt(CPUusage[1].trim()) + Integer.parseInt(SYSusage[1].trim());
+//                    break;
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "";
+//        }
+//        return String.valueOf(rate);
+        return "";
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+
+    public static int getMemory() {
+        Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
+
+        Debug.getMemoryInfo(memoryInfo);
+
+// dalvikPrivateClean + nativePrivateClean + otherPrivateClean;
+
+        int totalPrivateClean = memoryInfo.getTotalPrivateClean();
+
+// dalvikPrivateDirty + nativePrivateDirty + otherPrivateDirty;
+
+        int totalPrivateDirty = memoryInfo.getTotalPrivateDirty();
+
+// dalvikPss + nativePss + otherPss;
+
+        int totalPss = memoryInfo.getTotalPss();
+
+// dalvikSharedClean + nativeSharedClean + otherSharedClean;
+
+        int totalSharedClean = memoryInfo.getTotalSharedClean();
+
+// dalvikSharedDirty + nativeSharedDirty + otherSharedDirty;
+
+        int totalSharedDirty = memoryInfo.getTotalSharedDirty();
+
+// dalvikSwappablePss + nativeSwappablePss + otherSwappablePss;
+
+        int totalSwappablePss = memoryInfo.getTotalSwappablePss();
+
+        int total = totalPrivateClean + totalPrivateDirty + totalPss + totalSharedClean + totalSharedDirty + totalSwappablePss;
+
+        return total ;
+
     }
 
     }
