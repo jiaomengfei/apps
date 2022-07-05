@@ -65,7 +65,6 @@ public class AppDetailActivity extends AppCompatActivity {
 
         b = userDataSizeBytes / 1024;
         c = totalSizeBytes / 1024;
-        Log.d("total_aks", "onCreate: ==" + intent.getStringExtra("user_data_size_bytes") + "==" + b + "==" + intent.getStringExtra("total_size_bytes") + "==" + c);
 
         Bitmap bmp = BitmapFactory.decodeByteArray(bi, 0, bi.length);
         ImageView image = (ImageView) findViewById(R.id.appIconDetailImageView);
@@ -86,9 +85,7 @@ public class AppDetailActivity extends AppCompatActivity {
         List<PermissionListBean> appPermissionList = new ArrayList<PermissionListBean>();
         try {
             JSONObject jsonObject = new JSONObject(app_info);
-            Log.d("testo", "onCreate: " + jsonObject.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("user_permissions");
-            Log.d("testo1", "onCreate: " + jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 n++;
                 String tmpPer = jsonArray.getString(i).toString();
@@ -97,7 +94,6 @@ public class AppDetailActivity extends AppCompatActivity {
                 Double permissionVal = 0.0;
                 if (data_size != "") {
                     for (int j = 0; j < permissionsData.size(); j++) {
-                        Log.d("Permission1", "onCreate: ##" + splited[splited.length - 1].replace(" ", "_") + "##" + permissionsData.get(j).getPermissionName() + "**");
                         if (permissionsData.get(j).getPermissionName().equals(splited[splited.length - 1].replace(" ", "_"))) {
                             permissionVal = permissionsData.get(j).getPermissionVal();
                             ex += permissionVal;
@@ -109,7 +105,6 @@ public class AppDetailActivity extends AppCompatActivity {
             }
 
         } catch (JSONException e) {
-            Log.d("testo", "onCreate: " + e.toString());
             e.printStackTrace();
         }
         RecyclerView appDetailView = (RecyclerView) findViewById(R.id.appDetailView);
